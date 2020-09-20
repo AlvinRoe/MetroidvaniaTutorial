@@ -11,7 +11,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        rb.velocity = new Vector2(2, 0);
+        if(Input.GetKey(KeyCode.D))
+        {
+            rb.velocity = new Vector2(2, rb.velocity.y);
+        }
+        
+        
     }
 
 }
