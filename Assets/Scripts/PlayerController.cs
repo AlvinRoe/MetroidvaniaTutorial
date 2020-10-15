@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     //Serialized Fields
     [SerializeField] int speed = 2;
+    [SerializeField] int jumpPower = 10;
 
     void Start()
     {
@@ -18,13 +19,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float hInput = Input.GetAxis("Horizontal");        
-        rb.velocity = new Vector2(hInput * speed, rb.velocity.y);
+        float hInput = Input.GetAxis("Horizontal");
+        float vSpeed = Input.GetButtonDown("Jump") ? jumpPower : rb.velocity.y;
                 
         if(hInput > 0) 
             render.flipX = false;
         else if(hInput < 0)
             render.flipX = true;
+
+        rb.velocity = new Vector2(hInput * speed, vSpeed);
     }
 
 }
