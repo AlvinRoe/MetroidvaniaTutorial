@@ -48,44 +48,49 @@ public class PlayerController : MonoBehaviour
     }
     void IdleState()
     {
-        anim.Play("Idle");
-
-        float hInput = Input.GetAxis("Horizontal");
-        
-        if (Mathf.Abs(hInput) > Mathf.Epsilon)
-            state = PlayerStates.Run;
-        Jump();       
-               
+        CanRun();
+        CanJump();
+        CanFall();
     }
     void RunState()
     {
-        anim.Play("Run");
-
         HorizontalInput();
-
-        if (Mathf.Abs(rb.velocity.x) < Mathf.Epsilon)
-            state = PlayerStates.Idle;
-        Jump();
+        CanStop();        
+        CanJump();
+        CanFall();
     }
     void JumpState()
     {
-        anim.Play("Jump");
-
         HorizontalInput();
-
-        if (rb.velocity.y < -.001)
-            state = PlayerStates.Fall;
+        CanFall();        
     }
     void FallState()
     {
-        anim.Play("Fall");
-
         HorizontalInput();
-
-        if (rb.velocity.y >= 0)
-            state = PlayerStates.Idle;
+        CanLand();        
     }
 
+    void ChangeState(PlayerStates nextState)
+    {
+        switch(nextState)
+        {
+            case PlayerStates.Idle:
+                anim.Play("Idle");
+                break;
+            case PlayerStates.Run:
+                anim.Play("Run");
+                break;
+            case PlayerStates.Jump:
+                anim.Play("Jump");
+                break;
+            case PlayerStates.Fall:
+                anim.Play("Fall");
+                break;
+            default:
+                break;
+        }
+        state = nextState;
+    }
     void HorizontalInput()
     {
         float hInput = Input.GetAxis("Horizontal");
@@ -97,13 +102,34 @@ public class PlayerController : MonoBehaviour
 
         rb.velocity = new Vector2(hInput * speed, rb.velocity.y);
     }
-    void Jump()
+    void CanJump()
     {
         if (Input.GetButtonDown("Jump"))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-            state = PlayerStates.Jump;
+            ChangeState(PlayerStates.Jump);
         }
+    }
+    void CanRun()
+    {
+        float hInput = Input.GetAxis("Horizontal");
+        if (Mathf.Abs(hInput) > Mathf.Epsilon)
+            ChangeState(PlayerStates.Run);
+    }
+    void CanStop()
+    {
+        if (Mathf.Abs(rb.velocity.x) < Mathf.Epsilon)
+            ChangeState(PlayerStates.Idle);
+    }
+    void CanFall()
+    {
+        if (rb.velocity.y < -.001)
+            ChangeState(PlayerStates.Fall);
+    }
+    void CanLand()
+    {
+        if (rb.velocity.y >= 0)
+            ChangeState(PlayerStates.Idle);
     }
     #endregion
 }
