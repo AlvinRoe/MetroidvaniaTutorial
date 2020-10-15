@@ -1,0 +1,1 @@
+﻿public enum PlayerStates {Idle, Run, Jump, Fall}

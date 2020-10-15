@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     //Serialized Fields
     [SerializeField] int speed = 2;
     [SerializeField] int jumpPower = 10;
+    [SerializeField] PlayerStates state = PlayerStates.Idle;
 
     void Start()
     {
