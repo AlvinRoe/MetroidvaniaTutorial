@@ -7,17 +7,22 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer render;
     Animator anim;
+    CapsuleCollider2D coll;
 
     //Serialized Fields
     [SerializeField] int speed = 2;
     [SerializeField] int jumpPower = 10;
-    [SerializeField] PlayerStates state = PlayerStates.Idle;
+    [SerializeField] LayerMask groundLayer;
+
+    //Other variables
+    PlayerStates state = PlayerStates.Idle;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         render = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        coll = GetComponent<CapsuleCollider2D>();
     }
 
     void Update()
@@ -128,8 +133,8 @@ public class PlayerController : MonoBehaviour
     }
     void CanLand()
     {
-        if (rb.velocity.y >= 0)
-            ChangeState(PlayerStates.Idle);
+        if(coll.IsTouchingLayers(groundLayer))
+            ChangeState(PlayerStates.Idle);            
     }
     #endregion
 }
