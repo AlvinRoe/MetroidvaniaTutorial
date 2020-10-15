@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     //Component References
     Rigidbody2D rb;
     SpriteRenderer render;
+    Animator anim;
 
     //Serialized Fields
     [SerializeField] int speed = 2;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         render = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -28,6 +30,15 @@ public class PlayerController : MonoBehaviour
             render.flipX = true;
 
         rb.velocity = new Vector2(hInput * speed, vSpeed);
+
+        if (rb.velocity.y > .5)
+            anim.Play("Jump");
+        else if (rb.velocity.y < -.5)
+            anim.Play("Fall");
+        else if (Mathf.Abs(rb.velocity.x) > 0)
+            anim.Play("Run");
+        else
+            anim.Play("Idle");
     }
 
 }
