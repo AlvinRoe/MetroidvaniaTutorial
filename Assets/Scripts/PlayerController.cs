@@ -28,14 +28,23 @@ public class PlayerController : MonoBehaviour
     #region Finite State Machine
     void RunFSM()
     {
-        if (state == PlayerStates.Idle)
-            IdleState();
-        else if (state == PlayerStates.Run)
-            RunState();
-        else if (state == PlayerStates.Jump)
-            JumpState();
-        else if (state == PlayerStates.Fall)
-            FallState();
+        switch(state)
+        {
+            case PlayerStates.Idle:
+                IdleState();
+                break;
+            case PlayerStates.Run:
+                RunState();
+                break;
+            case PlayerStates.Jump:
+                JumpState();
+                break;
+            case PlayerStates.Fall:
+                FallState();
+                break;
+            default:
+                break;
+        }
     }
     void IdleState()
     {
