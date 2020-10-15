@@ -42,16 +42,44 @@ public class PlayerController : MonoBehaviour
         anim.Play("Idle");
 
         float hInput = Input.GetAxis("Horizontal");
+        
         if (Mathf.Abs(hInput) > Mathf.Epsilon)
             state = PlayerStates.Run;
+        Jump();       
+               
     }
     void RunState()
     {
         anim.Play("Run");
 
-        float hInput = Input.GetAxis("Horizontal");
-        if (Mathf.Abs(hInput) < Mathf.Epsilon)
+        HorizontalInput();
+
+        if (Mathf.Abs(rb.velocity.x) < Mathf.Epsilon)
             state = PlayerStates.Idle;
+        Jump();
+    }
+    void JumpState()
+    {
+        anim.Play("Jump");
+
+        HorizontalInput();
+
+        if (rb.velocity.y < -.001)
+            state = PlayerStates.Fall;
+    }
+    void FallState()
+    {
+        anim.Play("Fall");
+
+        HorizontalInput();
+
+        if (rb.velocity.y >= 0)
+            state = PlayerStates.Idle;
+    }
+
+    void HorizontalInput()
+    {
+        float hInput = Input.GetAxis("Horizontal");
 
         if (hInput > 0)
             render.flipX = false;
@@ -60,13 +88,13 @@ public class PlayerController : MonoBehaviour
 
         rb.velocity = new Vector2(hInput * speed, rb.velocity.y);
     }
-    void JumpState()
+    void Jump()
     {
-
-    }
-    void FallState()
-    {
-
+        if (Input.GetButtonDown("Jump"))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            state = PlayerStates.Jump;
+        }
     }
     #endregion
 }
