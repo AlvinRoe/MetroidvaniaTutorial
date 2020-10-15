@@ -12,15 +12,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.D))
-        {
-            rb.velocity = new Vector2(speed, rb.velocity.y);
-        }
-
-        else if(Input.GetKey(KeyCode.A))
-        {
-            rb.velocity = new Vector2(-speed, rb.velocity.y);    
-        }
+        float hInput = Input.GetAxis("Horizontal");        
+        rb.velocity = new Vector2(hInput * speed, rb.velocity.y);
+        
     }
 
 }
