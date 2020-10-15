@@ -3,6 +3,7 @@
 public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rb;
+    public int speed = 2;
 
     void Start()
     {
@@ -13,10 +14,13 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.D))
         {
-            rb.velocity = new Vector2(2, rb.velocity.y);
+            rb.velocity = new Vector2(speed, rb.velocity.y);
         }
-        
-        
+
+        else if(Input.GetKey(KeyCode.A))
+        {
+            rb.velocity = new Vector2(-speed, rb.velocity.y);    
+        }
     }
 
 }
