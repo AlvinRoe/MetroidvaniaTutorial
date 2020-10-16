@@ -11,7 +11,11 @@ public class PlayerController : MonoBehaviour
     //Serialized Fields
     [SerializeField] int speed = 2;
     [SerializeField] int jumpPower = 10;
+    [SerializeField] float attackRange;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] Transform attackPoint;
+    [SerializeField] Collider2D hitCollider;
+
 
     //Other variables
     PlayerStates state = PlayerStates.Idle;
@@ -187,7 +191,10 @@ public class PlayerController : MonoBehaviour
         else
             ChangeState(PlayerStates.Fall);        
     }
-
+    void CheckAttackCollisions()
+    {
+        hitCollider = Physics2D.OverlapCircle(attackPoint.position, attackRange);
+    }
 
 
     #endregion
