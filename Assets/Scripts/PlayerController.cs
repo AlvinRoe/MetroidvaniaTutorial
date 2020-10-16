@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] Transform attackPoint;
-    [SerializeField] Collider2D[] hitCollider;
 
 
     //Other variables
@@ -33,6 +32,12 @@ public class PlayerController : MonoBehaviour
     {
         RunFSM();
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);   
+    }
+
 
     #region Finite State Machine
     //Other FSM Functions
@@ -129,9 +134,9 @@ public class PlayerController : MonoBehaviour
         float hInput = Input.GetAxis("Horizontal");
 
         if (hInput > 0)
-            render.flipX = false;
+            transform.localScale = new Vector2(1, 1);
         else if (hInput < 0)
-            render.flipX = true;
+            transform.localScale = new Vector2(-1, 1);
 
         rb.velocity = new Vector2(hInput * speed, rb.velocity.y);
     }
@@ -194,7 +199,12 @@ public class PlayerController : MonoBehaviour
     }
     void CheckAttackCollisions()
     {
-        hitCollider = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
+        
+        foreach (Collider2D enemy in enemies)
+        {
+            Destroy(enemy.gameObject);            
+        }
     }
 
 
