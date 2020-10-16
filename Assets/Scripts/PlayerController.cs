@@ -152,4 +152,15 @@ public class PlayerController : MonoBehaviour
             ChangeState(PlayerStates.GroundAttack);
     }
     #endregion
+
+
+    #region Animation Events
+    void EndGroundAttack()
+    {
+        ChangeState(PlayerStates.Idle);
+    }
+
+
+
+    #endregion
 }
