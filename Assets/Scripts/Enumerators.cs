@@ -1,1 +1,1 @@
-﻿public enum PlayerStates {Idle, Run, Jump, Fall}
+﻿public enum PlayerStates {Idle, Run, Jump, Fall, GroundAttack, AirAttack}

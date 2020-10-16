@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -33,7 +32,7 @@ public class PlayerController : MonoBehaviour
     #region Finite State Machine
     void RunFSM()
     {
-        switch(state)
+        switch (state)
         {
             case PlayerStates.Idle:
                 IdleState();
@@ -47,6 +46,9 @@ public class PlayerController : MonoBehaviour
             case PlayerStates.Fall:
                 FallState();
                 break;
+            case PlayerStates.GroundAttack:
+                GroundAttackState();
+                break;
             default:
                 break;
         }
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviour
         CanRun();
         CanJump();
         CanFall();
+        CanGroundAttack();
     }
     void RunState()
     {
@@ -63,6 +66,7 @@ public class PlayerController : MonoBehaviour
         CanStop();        
         CanJump();
         CanFall();
+        CanGroundAttack();
     }
     void JumpState()
     {
@@ -74,7 +78,10 @@ public class PlayerController : MonoBehaviour
         HorizontalInput();
         CanLand();        
     }
-
+    void GroundAttackState()
+    {
+        rb.velocity = new Vector2(0, rb.velocity.y);        
+    }
     void ChangeState(PlayerStates nextState)
     {
         switch(nextState)
@@ -90,6 +97,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case PlayerStates.Fall:
                 anim.Play("Fall");
+                break;
+            case PlayerStates.GroundAttack:
+                anim.Play("GroundAttack");
                 break;
             default:
                 break;
@@ -135,6 +145,11 @@ public class PlayerController : MonoBehaviour
     {
         if(coll.IsTouchingLayers(groundLayer))
             ChangeState(PlayerStates.Idle);            
+    }
+    void CanGroundAttack()
+    {
+        if (Input.GetButtonDown("Attack"))
+            ChangeState(PlayerStates.GroundAttack);
     }
     #endregion
 }
