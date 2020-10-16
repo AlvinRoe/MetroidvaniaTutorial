@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int jumpPower = 10;
     [SerializeField] float attackRange;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] LayerMask enemyLayer;
     [SerializeField] Transform attackPoint;
     [SerializeField] Collider2D hitCollider;
 
@@ -193,7 +194,7 @@ public class PlayerController : MonoBehaviour
     }
     void CheckAttackCollisions()
     {
-        hitCollider = Physics2D.OverlapCircle(attackPoint.position, attackRange);
+        hitCollider = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
     }
 
 
