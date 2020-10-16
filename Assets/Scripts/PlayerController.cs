@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Finite State Machine
+    //Other FSM Functions
     void RunFSM()
     {
         switch (state)
@@ -49,10 +50,42 @@ public class PlayerController : MonoBehaviour
             case PlayerStates.GroundAttack:
                 GroundAttackState();
                 break;
+            case PlayerStates.AirAttack:
+                AirAttackState();
+                break;
             default:
                 break;
         }
     }
+    void ChangeState(PlayerStates nextState)
+    {
+        switch (nextState)
+        {
+            case PlayerStates.Idle:
+                anim.Play("Idle");
+                break;
+            case PlayerStates.Run:
+                anim.Play("Run");
+                break;
+            case PlayerStates.Jump:
+                anim.Play("Jump");
+                break;
+            case PlayerStates.Fall:
+                anim.Play("Fall");
+                break;
+            case PlayerStates.GroundAttack:
+                anim.Play("GroundAttack");
+                break;
+            case PlayerStates.AirAttack:
+                anim.Play("AirAttack");
+                break;
+            default:
+                break;
+        }
+        state = nextState;
+    }
+
+    //States
     void IdleState()
     {
         CanRun();
@@ -71,41 +104,21 @@ public class PlayerController : MonoBehaviour
     void JumpState()
     {
         HorizontalInput();
-        CanFall();        
+        CanFall();
+        CanAirAttack();
     }
     void FallState()
     {
         HorizontalInput();
-        CanLand();        
+        CanLand();
+        CanAirAttack();
     }
     void GroundAttackState()
     {
         rb.velocity = new Vector2(0, rb.velocity.y);        
     }
-    void ChangeState(PlayerStates nextState)
-    {
-        switch(nextState)
-        {
-            case PlayerStates.Idle:
-                anim.Play("Idle");
-                break;
-            case PlayerStates.Run:
-                anim.Play("Run");
-                break;
-            case PlayerStates.Jump:
-                anim.Play("Jump");
-                break;
-            case PlayerStates.Fall:
-                anim.Play("Fall");
-                break;
-            case PlayerStates.GroundAttack:
-                anim.Play("GroundAttack");
-                break;
-            default:
-                break;
-        }
-        state = nextState;
-    }
+    void AirAttackState() { }
+    //Building Block Functions
     void HorizontalInput()
     {
         float hInput = Input.GetAxis("Horizontal");
@@ -151,6 +164,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Attack"))
             ChangeState(PlayerStates.GroundAttack);
     }
+    void CanAirAttack()
+    {
+        //if the attack is pressed then change to the air attack state
+        if (Input.GetButtonDown("Attack"))
+            ChangeState(PlayerStates.AirAttack);
+    }
     #endregion
 
 
@@ -158,6 +177,15 @@ public class PlayerController : MonoBehaviour
     void EndGroundAttack()
     {
         ChangeState(PlayerStates.Idle);
+    }
+    void EndAirAttack()
+    {
+        if (coll.IsTouchingLayers(groundLayer))
+            ChangeState(PlayerStates.Idle);
+        else if (rb.velocity.y > 0)
+            ChangeState(PlayerStates.Jump);
+        else
+            ChangeState(PlayerStates.Fall);        
     }
 
 
