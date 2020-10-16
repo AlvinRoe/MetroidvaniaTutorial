@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] Transform attackPoint;
-    [SerializeField] Collider2D hitCollider;
+    [SerializeField] Collider2D[] hitCollider;
 
 
     //Other variables
@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
     }
     void CheckAttackCollisions()
     {
-        hitCollider = Physics2D.OverlapCircle(attackPoint.position, attackRange, enemyLayer);
+        hitCollider = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
     }
 
 
