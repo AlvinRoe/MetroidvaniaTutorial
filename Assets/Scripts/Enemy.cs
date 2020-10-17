@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     Vector3 startingPosition;
     [SerializeField] Vector3 leftPatrolPoint;
     [SerializeField] Vector3 rightPatrolPoint;
+    [SerializeField] float patrolStopTime = 2f;
 
     void Start()
     {
@@ -65,7 +66,13 @@ public class Enemy : MonoBehaviour
 
     void PatrolRight()
     {
-        print("In patrol right");      
+        if (rightPatrolPoint.x + startingPosition.x >= transform.position.x)
+            rb.velocity = new Vector2(speed, rb.velocity.y);
+        else
+        {
+            state = AIStates.PatrolStop;
+            StartCoroutine(StopForSeconds(patrolStopTime, AIStates.PatrolLeft));
+        }
     }
     void PatrolLeft()
     {
@@ -74,7 +81,7 @@ public class Enemy : MonoBehaviour
         else
         {
             state = AIStates.PatrolStop;
-            StartCoroutine(StopForSeconds(3f, AIStates.PatrolRight));
+            StartCoroutine(StopForSeconds(patrolStopTime, AIStates.PatrolRight));
         }
     }
     void PatrolStop()
@@ -86,6 +93,7 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         state = nextState;
+        transform.localScale = nextState == AIStates.PatrolLeft ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
     }
 
 
