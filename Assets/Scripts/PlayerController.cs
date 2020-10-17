@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        render = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         coll = GetComponent<CapsuleCollider2D>();
     }
