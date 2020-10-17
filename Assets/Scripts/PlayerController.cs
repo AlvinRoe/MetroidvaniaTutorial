@@ -12,9 +12,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int speed = 2;
     [SerializeField] int jumpPower = 10;
     [SerializeField] float attackRange;
+    [SerializeField] float airAttackRange;
+    [SerializeField] Vector3 airAttackOffset;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] LayerMask enemyLayer;
     [SerializeField] Transform attackPoint;
+    [SerializeField] bool testAirAttack;
 
 
     //Other variables
@@ -34,8 +37,11 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);   
+    {        
+        if(testAirAttack)
+            Gizmos.DrawWireSphere(attackPoint.position + airAttackOffset, airAttackRange);
+        else
+            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 
 
@@ -63,6 +69,9 @@ public class PlayerController : MonoBehaviour
             case PlayerStates.AirAttack:
                 AirAttackState();
                 break;
+            case PlayerStates.Hurt:
+                HurtState();
+                break;
             default:
                 break;
         }
@@ -88,6 +97,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case PlayerStates.AirAttack:
                 anim.Play("AirAttack");
+                break;
+            case PlayerStates.Hurt:
+                anim.Play("Hurt");
                 break;
             default:
                 break;
@@ -128,6 +140,10 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(0, rb.velocity.y);        
     }
     void AirAttackState() { }
+    void HurtState()
+    {
+        CanStop();
+    }
     //Building Block Functions
     void HorizontalInput()
     {
@@ -156,7 +172,7 @@ public class PlayerController : MonoBehaviour
     }
     void CanStop()
     {
-        if (Mathf.Abs(rb.velocity.x) < Mathf.Epsilon)
+        if (Mathf.Abs(rb.velocity.x) < .5f)
             ChangeState(PlayerStates.Idle);
     }
     void CanFall()
@@ -180,6 +196,17 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Attack"))
             ChangeState(PlayerStates.AirAttack);
     }
+
+    //Public Functions
+    public void SetHurtState(float knockbackAmount, Transform enemyTransform)
+    {
+        ChangeState(PlayerStates.Hurt);
+
+        if (enemyTransform.position.x > transform.position.x)
+            rb.velocity = new Vector2(-knockbackAmount, rb.velocity.y);
+        else
+            rb.velocity = new Vector2(knockbackAmount, rb.velocity.y);
+    }
     #endregion
 
 
@@ -197,13 +224,22 @@ public class PlayerController : MonoBehaviour
         else
             ChangeState(PlayerStates.Fall);        
     }
-    void CheckAttackCollisions()
+    void CheckGroundAttack()
     {
         Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
         
         foreach (Collider2D enemy in enemies)
         {
             Destroy(enemy.gameObject);            
+        }
+    }
+    void CheckAirAttack()
+    {
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPoint.position + airAttackOffset, airAttackRange, enemyLayer);
+
+        foreach (Collider2D enemy in enemies)
+        {
+            Destroy(enemy.gameObject);
         }
     }
 

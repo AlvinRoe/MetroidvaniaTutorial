@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 898193462}
   - component: {fileID: 898193461}
   - component: {fileID: 898193465}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -479,6 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8731c04602e7e24f8b72657d42ec956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  knockBackForce: 6
 --- !u!4 &1380083004
 Transform:
   m_ObjectHideFlags: 0
