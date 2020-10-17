@@ -65,18 +65,27 @@ public class Enemy : MonoBehaviour
 
     void PatrolRight()
     {
-        
+        print("In patrol right");      
     }
     void PatrolLeft()
     {
         if (leftPatrolPoint.x + startingPosition.x <= transform.position.x)
             rb.velocity = new Vector2(-speed, rb.velocity.y);
         else
+        {
             state = AIStates.PatrolStop;
+            StartCoroutine(StopForSeconds(3f, AIStates.PatrolRight));
+        }
     }
     void PatrolStop()
     {
         rb.velocity = new Vector2(0, rb.velocity.y);
+    }
+
+    IEnumerator StopForSeconds(float seconds, AIStates nextState)
+    {
+        yield return new WaitForSeconds(seconds);
+        state = nextState;
     }
 
 
