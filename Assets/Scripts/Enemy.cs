@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] float knockBackForce;
+    [SerializeField] float speed = 5f;
+    Rigidbody2D rb;
 
     //Finite State Machine Variables
-    AIStates state = AIStates.Patrol;
+    AIStates state = AIStates.PatrolLeft;
 
     //Patrol State Variables
     Vector3 startingPosition;
@@ -16,7 +19,8 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        startingPosition = transform.position;    
+        startingPosition = transform.position;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -45,17 +49,34 @@ public class Enemy : MonoBehaviour
     {
         switch(state)
         {
-            case AIStates.Patrol:
-                PatrolState();
+            case AIStates.PatrolRight:
+                PatrolRight();
+                break;
+            case AIStates.PatrolLeft:
+                PatrolLeft();
+                break;
+            case AIStates.PatrolStop:
+                PatrolStop();
                 break;
             default:
                 break;
         }
     }
 
-    void PatrolState()
+    void PatrolRight()
     {
-
+        
+    }
+    void PatrolLeft()
+    {
+        if (leftPatrolPoint.x + startingPosition.x <= transform.position.x)
+            rb.velocity = new Vector2(-speed, rb.velocity.y);
+        else
+            state = AIStates.PatrolStop;
+    }
+    void PatrolStop()
+    {
+        rb.velocity = new Vector2(0, rb.velocity.y);
     }
 
 
