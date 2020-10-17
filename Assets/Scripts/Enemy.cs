@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float knockBackForce;
     [SerializeField] float speed = 5f;
     Rigidbody2D rb;
+    Animator anim;
 
     //Finite State Machine Variables
     AIStates state = AIStates.PatrolLeft;
@@ -22,6 +23,7 @@ public class Enemy : MonoBehaviour
     {
         startingPosition = transform.position;
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -87,6 +89,7 @@ public class Enemy : MonoBehaviour
     void PatrolStop()
     {
         rb.velocity = new Vector2(0, rb.velocity.y);
+        anim.speed = 0;
     }
 
     IEnumerator StopForSeconds(float seconds, AIStates nextState)
@@ -94,6 +97,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         state = nextState;
         transform.localScale = nextState == AIStates.PatrolLeft ? new Vector3(1, 1, 1) : new Vector3(-1, 1, 1);
+        anim.speed = 1;
     }
 
 
