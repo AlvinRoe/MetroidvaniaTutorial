@@ -232,6 +232,8 @@ MonoBehaviour:
   speed: 8
   jumpPower: 10
   attackRange: 1.13
+  airAttackRange: 0.92
+  airAttackOffset: {x: 0.18, y: 0.39, z: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -239,6 +241,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   attackPoint: {fileID: 380492449}
+  testAirAttack: 0
 --- !u!70 &898193462
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -476,7 +479,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 989079100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8731c04602e7e24f8b72657d42ec956, type: 3}
+  m_Script: {fileID: 11500000, guid: ad94e93c1d3c6854a839e045dfca3a13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   knockBackForce: 6
