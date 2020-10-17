@@ -4,7 +4,6 @@ public class PlayerController : MonoBehaviour
 {
     //Component References
     Rigidbody2D rb;
-    SpriteRenderer render;
     Animator anim;
     CapsuleCollider2D coll;
 
@@ -44,6 +43,11 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 
+
+    float GetInput(string inputName)
+    {
+        return 1.5f;
+    }
 
     #region Finite State Machine
     //Other FSM Functions
