@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
     }
     void CanLand()
     {
-        if(coll.IsTouchingLayers(groundLayer))
+        if(coll.IsTouchingLayers(groundLayer) && rb.velocity.y >= -.1)
             ChangeState(PlayerStates.Idle);            
     }
     void CanGroundAttack()
