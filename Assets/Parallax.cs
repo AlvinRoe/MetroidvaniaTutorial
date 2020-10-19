@@ -6,6 +6,7 @@ public class Parallax : MonoBehaviour
 {
     public Transform cameraTransform;
     Vector3 lastCameraPosition;
+    [SerializeField] Vector2 parallaxEffectAmount = new Vector2(1f, 1f);
 
     private void Start()
     {
@@ -14,7 +15,7 @@ public class Parallax : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 changeInPosition = cameraTransform.position - lastCameraPosition;
+        Vector3 changeInPosition = (cameraTransform.position - lastCameraPosition) * parallaxEffectAmount;
         transform.position = transform.position + changeInPosition;
         lastCameraPosition = cameraTransform.position;
     }
